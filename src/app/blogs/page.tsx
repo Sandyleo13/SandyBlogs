@@ -1,7 +1,7 @@
 
 "use client"; // Making it client component to use hooks for fetching and pagination
 
-import { useEffect, useState } Sfrom 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useBlogStore } from '@/lib/blogStore';
 import type { BlogPost } from '@/lib/types';
