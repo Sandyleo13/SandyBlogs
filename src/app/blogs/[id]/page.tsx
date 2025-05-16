@@ -87,15 +87,7 @@ export default function BlogDetailPage() {
         </Link>
       </Button>
       <Card className="shadow-xl overflow-hidden">
-        <Image
-          src={`https://placehold.co/800x400.png`}
-          alt={`Cover image for ${post.title}`}
-          width={800}
-          height={400}
-          className="w-full h-64 object-cover"
-          priority // Prioritize loading for LCP
-          data-ai-hint="article detail"
-        />
+        {/* Cover image removed */}
         <CardHeader className="pt-6">
           <CardTitle className="text-3xl md:text-4xl font-bold text-primary leading-tight">{post.title}</CardTitle>
           <CardDescription className="mt-3 text-base text-muted-foreground flex items-center flex-wrap gap-x-4 gap-y-2">
