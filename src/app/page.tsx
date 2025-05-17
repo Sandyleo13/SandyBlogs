@@ -2,7 +2,6 @@
 import { Button } from "@/components/ui/button";
 import { APP_NAME } from "@/lib/constants";
 import { BookOpen, Feather } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 
 export default function HomePage() {
@@ -19,14 +18,7 @@ export default function HomePage() {
       </header>
 
       <section className="mb-12">
-        <Image
-          src="https://placehold.co/800x400.png"
-          alt="Abstract representation of blogging"
-          width={800}
-          height={400}
-          className="rounded-lg shadow-xl mx-auto"
-          data-ai-hint="blogging abstract"
-        />
+        {/* Image removed as per request */}
       </section>
 
       <section>

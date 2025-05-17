@@ -3,8 +3,7 @@ import type { BlogPost } from '@/lib/types';
 import Link from 'next/link';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { CalendarDays, UserCircle, MessageSquare } from 'lucide-react';
-import Image from 'next/image';
+import { CalendarDays, UserCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 interface BlogCardProps {
@@ -16,16 +15,7 @@ export default function BlogCard({ post }: BlogCardProps) {
 
   return (
     <Card className="flex flex-col h-full overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
-      <Link href={`/blogs/${post.id}`} className="block">
-        <Image
-          src={`https://placehold.co/600x300.png`} // Generic placeholder
-          alt={`Cover image for ${post.title}`}
-          width={600}
-          height={300}
-          className="w-full h-48 object-cover"
-          data-ai-hint="article blog"
-        />
-      </Link>
+      {/* Image removed as per request */}
       <CardHeader className="p-4 sm:p-6">
         <Link href={`/blogs/${post.id}`} className="block">
           <CardTitle className="text-xl sm:text-2xl font-semibold hover:text-primary transition-colors duration-200 leading-tight">
