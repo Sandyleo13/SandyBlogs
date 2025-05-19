@@ -1,4 +1,3 @@
-
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,7 +13,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useAuthStore } from "@/lib/authStore";
+import { signup } from '@/lib/api';
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
@@ -31,7 +30,6 @@ const formSchema = z.object({
 });
 
 export default function SignupPage() {
-  const { signup } = useAuthStore();
   const router = useRouter();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
@@ -49,12 +47,8 @@ export default function SignupPage() {
     setIsLoading(true);
     try {
       const user = await signup(values.email, values.password);
-      if (user) {
-        toast({ title: "Signup Successful", description: "Welcome! Your account has been created." });
-        router.push("/blogs"); // Or redirect to a profile setup page
-      } else {
-        throw new Error("Signup failed. Please try again.");
-      }
+      toast({ title: "Signup Successful", description: "Welcome! Your account has been created." });
+      router.push("/blogs");
     } catch (error: any) {
       toast({
         title: "Signup Failed",

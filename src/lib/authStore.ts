@@ -1,8 +1,8 @@
-
 "use client";
 
 import { create } from 'zustand';
 import {type User } from '@/lib/types';
+import { login as apiLogin, signup as apiSignup } from '@/lib/api';
 
 const AUTH_STORAGE_KEY = 'sandy_blogs_auth';
 
@@ -16,9 +16,6 @@ interface AuthState {
   initializeAuth: () => void;
 }
 
-// Mock user data - in a real app, this would come from a backend
-const MOCK_USERS: Record<string, User> = {};
-
 export const useAuthStore = create<AuthState>((set, get) => ({
   user: null,
   token: null,
@@ -31,7 +28,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         const { user, token } = JSON.parse(storedAuth);
         if (user && token) {
           set({ user, token, isLoading: false });
-          // In a real app, you'd verify the token with the backend here
         } else {
           set({ isLoading: false });
         }
@@ -45,42 +41,21 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
 
   login: async (email, password) => {
-    // Simulate API call & JWT generation
-    // For mock: if user exists (previously signed up) or is a known mock user, log them in.
-    // Password check is trivialized for mock.
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        let userToLogin = MOCK_USERS[email];
-        if (!userToLogin) { // Simple auto-signup if not found, for easier testing.
-           userToLogin = { id: Date.now().toString(), email };
-           MOCK_USERS[email] = userToLogin;
-        }
-
-        const mockToken = `mock-jwt-for-${email}-${Date.now()}`;
-        localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify({ user: userToLogin, token: mockToken }));
-        set({ user: userToLogin, token: mockToken, isLoading: false });
-        resolve(userToLogin);
-      }, 500);
-    });
+    // Use real API
+    const user = await apiLogin(email, password);
+    const mockToken = `mock-jwt-for-${email}-${Date.now()}`;
+    localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify({ user, token: mockToken }));
+    set({ user, token: mockToken, isLoading: false });
+    return user;
   },
 
   signup: async (email, password) => {
-     // Simulate API call & JWT generation
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (MOCK_USERS[email]) {
-          // reject(new Error("User already exists")); // Or allow login
-          // For simplicity, let's just log them in if they try to signup again
-        }
-        const newUser: User = { id: Date.now().toString(), email };
-        MOCK_USERS[email] = newUser; // Store mock user
-
-        const mockToken = `mock-jwt-for-${email}-${Date.now()}`;
-        localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify({ user: newUser, token: mockToken }));
-        set({ user: newUser, token: mockToken, isLoading: false });
-        resolve(newUser);
-      }, 500);
-    });
+    // Use real API
+    const user = await apiSignup(email, password);
+    const mockToken = `mock-jwt-for-${email}-${Date.now()}`;
+    localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify({ user, token: mockToken }));
+    set({ user, token: mockToken, isLoading: false });
+    return user;
   },
 
   logout: () => {

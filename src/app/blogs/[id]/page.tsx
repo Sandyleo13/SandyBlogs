@@ -1,10 +1,9 @@
-
 "use client";
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { useBlogStore } from '@/lib/blogStore';
 import { useAuthStore } from '@/lib/authStore';
+import { fetchBlog, deleteBlog } from '@/lib/api';
 import type { BlogPost } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -19,9 +18,8 @@ export default function BlogDetailPage() {
   const params = useParams();
   const router = useRouter();
   const { toast } = useToast();
-  const id = typeof params.id === 'string' ? params.id : '';
+  const id = params && typeof params.id === 'string' ? params.id : '';
 
-  const { fetchPostById, deletePost } = useBlogStore();
   const { user } = useAuthStore();
 
   const [post, setPost] = useState<BlogPost | null>(null);
@@ -32,30 +30,26 @@ export default function BlogDetailPage() {
     if (id) {
       const loadPost = async () => {
         setIsLoading(true);
-        const fetchedPost = await fetchPostById(id);
-        if (fetchedPost) {
+        try {
+          const fetchedPost = await fetchBlog(id);
           setPost(fetchedPost);
-        } else {
+        } catch (error) {
           toast({ title: "Error", description: "Blog post not found.", variant: "destructive" });
-          router.push('/blogs'); // Or a 404 page
+          router.push('/blogs');
         }
         setIsLoading(false);
       };
       loadPost();
     }
-  }, [id, fetchPostById, router, toast]);
+  }, [id]);
 
   const handleDelete = async () => {
     if (!post || !user) return;
     setIsDeleting(true);
     try {
-      const success = await deletePost(post.id, user);
-      if (success) {
-        toast({ title: "Post Deleted", description: `"${post.title}" has been successfully deleted.` });
-        router.push('/blogs');
-      } else {
-        throw new Error("Failed to delete post or unauthorized.");
-      }
+      await deleteBlog(post.id);
+      toast({ title: "Post Deleted", description: `"${post.title}" has been successfully deleted.` });
+      router.push('/blogs');
     } catch (error: any) {
       toast({ title: "Error Deleting Post", description: error.message || "Could not delete the post.", variant: "destructive" });
       setIsDeleting(false);

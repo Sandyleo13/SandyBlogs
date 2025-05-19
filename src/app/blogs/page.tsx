@@ -1,9 +1,9 @@
-
 "use client"; // Making it client component to use hooks for fetching and pagination
 
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { useBlogStore } from '@/lib/blogStore';
+import { fetchBlogs } from '@/lib/api';
+import { useAuthStore } from '@/lib/authStore';
 import type { BlogPost } from '@/lib/types';
 import BlogCard from '@/components/blog/BlogCard';
 import PaginationControls from '@/components/blog/PaginationControls';
@@ -12,13 +12,11 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { PlusCircle } from 'lucide-react';
-import { useAuthStore } from '@/lib/authStore';
 
 export default function BlogsPage() {
   const searchParams = useSearchParams();
-  const page = parseInt(searchParams.get('page') || '1', 10);
+  const page = parseInt(searchParams?.get('page') || '1', 10);
   
-  const { fetchPosts } = useBlogStore();
   const { user } = useAuthStore(); // Get user for conditional "Create Post" button
 
   const [posts, setPosts] = useState<BlogPost[]>([]);
@@ -28,13 +26,18 @@ export default function BlogsPage() {
   useEffect(() => {
     const loadPosts = async () => {
       setIsLoading(true);
-      const { posts: fetchedPosts, totalPosts: fetchedTotalPosts } = await fetchPosts(page);
-      setPosts(fetchedPosts);
-      setTotalPosts(fetchedTotalPosts);
+      try {
+        const allPosts = await fetchBlogs();
+        setPosts(allPosts);
+        setTotalPosts(allPosts.length);
+      } catch (error) {
+        setPosts([]);
+        setTotalPosts(0);
+      }
       setIsLoading(false);
     };
     loadPosts();
-  }, [page, fetchPosts]);
+  }, [page]);
 
   const totalPages = Math.ceil(totalPosts / ITEMS_PER_PAGE);
 

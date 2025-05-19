@@ -18,7 +18,7 @@ export default function EditBlogPage() {
   const params = useParams();
   const router = useRouter();
   const { toast } = useToast();
-  const id = typeof params.id === 'string' ? params.id : '';
+  const id = params && typeof params.id === 'string' ? params.id : '';
 
   const { fetchPostById, updatePost } = useBlogStore();
   const { user } = useAuthStore();

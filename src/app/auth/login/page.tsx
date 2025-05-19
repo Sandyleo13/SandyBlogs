@@ -1,4 +1,3 @@
-
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,12 +13,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useAuthStore } from "@/lib/authStore";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
 import { LogIn, Mail, KeyRound } from 'lucide-react';
 import { useState } from "react";
+import { login } from '@/lib/api';
+import { useAuthStore } from '@/lib/authStore';
 
 const formSchema = z.object({
   email: z.string().email({ message: "Invalid email address." }),
@@ -27,10 +27,10 @@ const formSchema = z.object({
 });
 
 export default function LoginPage() {
-  const { login } = useAuthStore();
   const router = useRouter();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const loginStore = useAuthStore((state) => state.login);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -43,12 +43,16 @@ export default function LoginPage() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     try {
-      const user = await login(values.email, values.password);
-      if (user) {
+      const user = await loginStore(values.email, values.password);
+      if (user && user.email) {
         toast({ title: "Login Successful", description: `Welcome back, ${user.email}!` });
         router.push("/blogs");
       } else {
-        throw new Error("Login failed. Please check your credentials.");
+        toast({
+          title: "Login Failed",
+          description: "User information is missing.",
+          variant: "destructive",
+        });
       }
     } catch (error: any) {
       toast({

@@ -1,0 +1,27 @@
+[
+  {
+    "id": "1",
+    "title": "The Art of Minimalism in Design",
+    "content": "Minimalist design focuses on simplicity and functionality. This post explores its principles and benefits.",
+    "authorId": "1747665166815",
+    "authorEmail": "sandipandas0816@gmail.com",
+    "createdAt": "2025-05-19T10:00:00.000Z",
+    "updatedAt": "2025-05-19T10:00:00.000Z"
+  },
+  {
+    "id": "2",
+    "title": "Understanding Tailwind CSS",
+    "content": "Tailwind CSS is a utility-first CSS framework that helps you build custom designs rapidly. Learn how to make the most of it.",
+    "authorId": "user2",
+    "createdAt": "2025-05-18T10:00:00.000Z",
+    "updatedAt": "2025-05-18T10:00:00.000Z"
+  },
+  {
+    "id": "3",
+    "title": "Getting Started with Next.js",
+    "content": "Next.js is a popular React framework for building server-side rendered and static web applications. This post covers the basics.",
+    "authorId": "user1",
+    "createdAt": "2025-05-17T10:00:00.000Z",
+    "updatedAt": "2025-05-17T10:00:00.000Z"
+  }
+]
