@@ -26,7 +26,7 @@ A full-stack blogging platform where users can write, edit, and publish articles
 
 ## 🧑‍💼 Author
 **Sandipan Das**  
-🔗 [Portfolio](https://safer20.netlify.app/) | 📧 sandyleo13@gmail.com
+🔗 [Portfolio](https://safer20.netlify.app/) | 📧 sandipandas0816@gmail.com
 
 ---
 
